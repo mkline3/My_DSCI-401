@@ -1,0 +1,87 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+ import pprint
+ from sklearn import linear_model
+ from sklearn.model_selection import train_test_split
+ from sklearn.metrics import mean_squared_error
+  from sklearn.metrics import median_absolute_error
+ from sklearn.metrics import r2_score
+ from sklearn.metrics import explained_variance_score
+ from sklearn.feature_selection import SelectPercentile
+ from sklearn.feature_selection import SelectKBest
+ from sklearn.feature_selection import f_regression
+ 
+
+ ha = pd.read_csv('./AmesHousingSetA.csv.')
+
+ hb = pd.read_csv('./AmesHousingSetB.csv.')
+
+for col in ha:
+   ...:     ha[col].fillna((ha[col].mean()), inplace=True)
+   ...:
+
+ for col in hb:
+   ...:     hb[col].fillna((hb[col].mean()), inplace=True)
+
+ ha.head
+//Get all but the last value
+ a_x = ha[list(ha)[:37]]
+//Get the price values
+ a_y = ha[list(ha)[-1]]
+model = linear_model.LinearRegression()
+//creats test values out of 20% of data
+ x_train, x_test, y_train, y_test = train_test_split(a_x, a_y, test_size = 0.2, random_state = 4)
+model.fit(x_train,y_train)
+preds = model.predict(x_test)
+print('R^2 (Base Model): ' + str(r2_score(y_test, preds)))
+	R^2 (Base Model): 0.828403502176
+//for best model I'm using a lasso regression
+
+ alphas = [0.0, 0.01, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0]
+
+ for a in alphas:
+    ...:     lasso_mod = linear_model.Lasso(alpha=a, normalize=True, fit_intercept=True)
+    ...:     lasso_mod.fit(x_train, y_train)
+    ...:     preds = lasso_mod.predict(x_test)
+    ...:     print('R^2 (Lasso Model with alpha=' + str(a) + '): ' + str(r2_score(y_test, preds)))
+	
+R^2 (Lasso Model with alpha=0.0): 0.828403502223
+R^2 (Lasso Model with alpha=0.01): 0.828408225136
+R^2 (Lasso Model with alpha=0.1): 0.828429499323
+R^2 (Lasso Model with alpha=0.25): 0.828456079957
+R^2 (Lasso Model with alpha=0.5): 0.828507634764
+R^2 (Lasso Model with alpha=1.0): 0.828648325736
+R^2 (Lasso Model with alpha=2.5): 0.829017015491
+R^2 (Lasso Model with alpha=5.0): 0.829613132964	
+
+print(median_absolute_error(y_test, preds))
+15591.6578252
+
+print(explained_variance_score(y_test, preds))
+0.829681825677
+
+//values for the b sets
+ b_y = hb[list(hb)[-1]]
+
+b_x = hb[list(hb)[:37]]
+
+bx_train, bx_test, by_train, by_test = train_test_split(b_x, b_y, test_size = 0.2, random_state = 4)
+
+In [26]: for a in alphas:
+    ...:     lasso_mod = linear_model.Lasso(alpha=a, normalize=True, fit_intercept=True)
+    ...:     lasso_mod.fit(bx_train, by_train)
+    ...:     preds = lasso_mod.predict(bx_test)
+    ...:     print('R^2 (Lasso Model with alpha=' + str(a) + '): ' + str(r2_score(by_test, preds)))
+R^2 (Lasso Model with alpha=0.0): 0.863480578585
+R^2 (Lasso Model with alpha=0.01): 0.863483412174
+R^2 (Lasso Model with alpha=0.1): 0.863507877298
+R^2 (Lasso Model with alpha=0.25): 0.863556589234
+R^2 (Lasso Model with alpha=0.5): 0.863621185023
+R^2 (Lasso Model with alpha=1.0): 0.863717219462
+R^2 (Lasso Model with alpha=2.5): 0.864022884798
+R^2 (Lasso Model with alpha=5.0): 0.864535316249
+
+print(median_absolute_error(by_test, preds))
+14414.3341561
+print(explained_variance_score(by_test, preds))
+0.867446407699
