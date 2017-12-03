@@ -1,0 +1,82 @@
+//Validation example
+In [1]: import pandas as pd
+
+In [2]: from sklearn.model_selection import train_test_split
+
+In [3]: from sklearn import preprocessing, naive_bayes
+
+In [4]: from data_util import *
+
+In [5]: data = pd.read_csv('./Churn_data.csv')
+
+In [7]: val = pd.read_csv('./Churn_validation.csv')
+
+In [8]: clean = {'Gender':{"Male": 0, "Female": 1},'Income': {"Lower":0, "Upper
+   ...: ": 1}}
+
+In [9]: data.replace(clean, inplace=True)
+
+In [10]: val.replace(clean, inplace=True)
+
+In [11]: features = list(data)
+
+In [12]: features.remove('Churn')
+
+In [13]: features.remove('CustID')
+
+In [14]: f = list(val)
+
+In [15]: f.remove('Churn')
+
+In [16]: f.remove('CustID')
+
+In [17]: x_train = data[features]
+
+In [18]: y_train = data['Churn']
+
+In [19]: x_test = val[f]
+
+In [20]: y_test = val['Churn']
+
+In [21]: le = preprocessing.LabelEncoder()
+
+In [22]: y_train = le.fit_transform(y_train)
+
+In [23]: y_test = le.fit_transform(y_test)
+
+In [24]: gnb_mod = naive_bayes.GaussianNB()
+
+In [25]: gnb_mod.fit(x_train, y_train)
+Out[25]: GaussianNB(priors=None)
+
+In [26]: preds = gnb_mod.predict(x_test)
+
+In [27]: print_multiclass_classif_error_report(y_test, preds)
+Accuracy: 0.71875
+Avg. F1 (Micro): 0.71875
+Avg. F1 (Macro): 0.718475073314
+Avg. F1 (Weighted): 0.716825513196
+             precision    recall  f1-score   support
+
+          0       0.92      0.58      0.71        19
+          1       0.60      0.92      0.73        13
+
+avg / total       0.79      0.72      0.72        32
+
+Confusion Matrix:
+[[11  8]
+ [ 1 12]]
+
+In [28]: y_test_labs = le.inverse_transform(y_test)
+
+In [29]: pred_labs = le.inverse_transform(preds)
+
+In [30]: print('(Actual, Predicted): \n' + str(zip(y_test_labs, pred_labs)))
+(Actual, Predicted):
+[('Yes', 'Yes'), ('Yes', 'Yes'), ('Yes', 'Yes'), ('Yes', 'Yes'), ('No', 'No'), (
+'Yes', 'Yes'), ('No', 'Yes'), ('Yes', 'Yes'), ('Yes', 'Yes'), ('No', 'No'), ('No
+', 'Yes'), ('No', 'Yes'), ('Yes', 'Yes'), ('No', 'No'), ('Yes', 'Yes'), ('No', '
+No'), ('Yes', 'Yes'), ('No', 'No'), ('No', 'Yes'), ('No', 'No'), ('No', 'Yes'),
+('No', 'Yes'), ('No', 'Yes'), ('No', 'No'), ('Yes', 'Yes'), ('No', 'Yes'), ('No'
+, 'No'), ('Yes', 'Yes'), ('No', 'No'), ('No', 'No'), ('Yes', 'No'), ('No', 'No')
+]

@@ -1,0 +1,66 @@
+ //Guassian method
+ 
+ import pandas as pd
+
+ from sklearn.model_selection import train_test_split
+
+ from sklearn import preprocessing, naive_bayes
+ from data_util import *
+ data = pd.read_csv('./churn_data.csv')
+
+ clean = {'Gender':{"Male": 0, "Female": 1},'Income': {"Lower":0, "Upper":
+   ...: 1}}
+
+ data.replace(clean, inplace=True)
+ features = list(data)
+
+ features.remove('Churn')
+
+ features.remove('CustID')
+
+
+ data_x = data[features]
+
+ data_y = data['Churn']
+ le = preprocessing.LabelEncoder()
+
+ data_y = le.fit_transform(data_y)
+
+ x_train, x_test, y_train, y_test = train_test_split(data_x, data_y, test_
+    ...: size = 0.3, random_state = 4)
+    ...:
+
+gnb_mod = naive_bayes.GaussianNB()
+ gnb_mod.fit(x_train, y_train)
+ y_test_labs = le.inverse_transform(y_test)
+
+ preds = gnb_mod.predict(x_test)
+
+ pred_labs = le.inverse_transform(preds)
+
+ print_multiclass_classif_error_report(y_test, preds)
+ Accuracy: 0.769230769231
+Avg. F1 (Micro): 0.769230769231
+Avg. F1 (Macro): 0.769230769231
+Avg. F1 (Weighted): 0.769230769231
+             precision    recall  f1-score   support
+
+          0       0.71      0.83      0.77        18
+          1       0.83      0.71      0.77        21
+
+avg / total       0.78      0.77      0.77        39
+
+Confusion Matrix:
+[[15  3]
+ [ 6 15]]
+ 
+ print('(Actual, Predicted): \n' + str(zip(y_test_labs, pred_labs)))
+(Actual, Predicted):
+[('No', 'No'), ('Yes', 'Yes'), ('Yes', 'No'), ('Yes', 'Yes'), ('No', 'Yes'), ('Y
+es', 'Yes'), ('Yes', 'Yes'), ('No', 'No'), ('No', 'No'), ('Yes', 'Yes'), ('No',
+'No'), ('No', 'No'), ('Yes', 'No'), ('Yes', 'No'), ('No', 'No'), ('No', 'No'), (
+'No', 'No'), ('No', 'No'), ('Yes', 'No'), ('Yes', 'Yes'), ('Yes', 'Yes'), ('No',
+ 'No'), ('Yes', 'Yes'), ('No', 'No'), ('Yes', 'Yes'), ('No', 'No'), ('Yes', 'No'
+), ('No', 'No'), ('Yes', 'Yes'), ('Yes', 'Yes'), ('No', 'No'), ('Yes', 'Yes'), (
+'Yes', 'Yes'), ('Yes', 'No'), ('Yes', 'Yes'), ('No', 'No'), ('Yes', 'Yes'), ('No
+', 'Yes'), ('No', 'Yes')]

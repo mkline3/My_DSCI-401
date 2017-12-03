@@ -1,0 +1,97 @@
+//Dtree on Churn_data
+import pandas as pd
+
+from sklearn.model_selection import train_test_split
+
+from sklearn import preprocessing, tree
+
+from data_util import *
+
+data = pd.read_csv('./Churn_data.csv')
+
+clean = {'Gender':{"Male": 0, "Female": 1},'Income': {"Lower":0, "Upper
+":1}}
+
+data.replace(clean, inplace=True)
+
+features = list(data)
+
+features.remove('Churn')
+
+ features.remove('CustID')
+
+ data_x = data[features]
+  data_y = data['Churn']
+
+ le = preprocessing.LabelEncoder()
+
+ data_y = le.fit_transform(data_y)
+
+ x_train, x_test, y_train, y_test = train_test_split(data_x,data_y, tes
+ t_size = 0.3, random_state = 4)
+
+ print('---------DTREE WITH GINI IMPURITY CRITERION____
+ __')
+-DTREE WITH GINI IMPURITY CRITERION______
+
+ dtree_gini_mod = tree.DecisionTreeClassifier(criterion
+ ='entropy')
+
+ dtree_gini_mod = tree.DecisionTreeClassifier(criterion
+ ='gini')
+DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=None,
+            max_features=None, max_leaf_nodes=None,
+            min_impurity_split=1e-07, min_samples_leaf=1,
+            min_samples_split=2, min_weight_fraction_leaf=0.0,
+            presort=False, random_state=None, splitter='best')
+preds_gini = dtree_gini_mod.predict(x_test)
+
+print_multiclass_classif_error_report(y_test, preds_gi
+ni)
+Accuracy: 0.769230769231
+Avg. F1 (Micro): 0.769230769231
+Avg. F1 (Macro): 0.768622280817
+Avg. F1 (Weighted): 0.767709548197
+             precision    recall  f1-score   support
+
+          0       0.70      0.89      0.78        18
+          1       0.88      0.67      0.76        21
+
+avg / total       0.79      0.77      0.77        39
+
+Confusion Matrix:
+[[16  2]
+ [ 7 14]]
+
+print('\n----------DTREE WITH ENTROPY CRITERION-------
+')
+
+-DTREE WITH ENTROPY CRITERION-------
+
+dtree_entropy_mod = tree.DecisionTreeClassifier(criter
+ion='entropy')
+
+dtree_entropy_mod.fit(x_train, y_train)
+ DecisionTreeClassifier(class_weight=None, criterion='entropy', max_depth=None,
+            max_features=None, max_leaf_nodes=None,
+            min_impurity_split=1e-07, min_samples_leaf=1,
+            min_samples_split=2, min_weight_fraction_leaf=0.0,
+            presort=False, random_state=None, splitter='best')
+preds_entropy = dtree_entropy_mod.predict(x_test)
+
+print_multiclass_classif_error_report(y_test, preds_en
+tropy)
+Accuracy: 0.717948717949
+Avg. F1 (Micro): 0.717948717949
+Avg. F1 (Macro): 0.717205009888
+Avg. F1 (Weighted): 0.716089447797
+             precision    recall  f1-score   support
+
+          0       0.65      0.83      0.73        18
+          1       0.81      0.62      0.70        21
+
+avg / total       0.74      0.72      0.72        39
+
+Confusion Matrix:
+[[15  3]
+ [ 8 13]]
