@@ -1,0 +1,97 @@
+Red wine
+In [1]: import pandas as pd
+
+In [2]: from sklearn import preprocessing
+
+In [3]: from sklearn import naive_bayes
+
+In [4]: from data_util import *
+
+In [5]: red = pd.read_csv('./data/wineQualityReds.csv')
+
+In [6]: clean= {'quality':{0:"low",1:"low",2:"low", 3:"low", 4:"med", 5:"med",
+   ...: 6:"med", 7:"med", 8:"high", 9:"high",10:"high"}}
+
+In [7]: red.replace(clean, inplace =True)
+
+In [8]: features = list(red)
+
+In [9]: features.remove('quality')
+
+In [10]: x = red[features]
+
+In [11]: y= red['quality']
+
+In [12]: le = preprocessing.LabelEncoder()
+
+In [13]: y = le.fit_transform(y)
+
+
+
+In [15]: from sklearn.model_selection import train_test_split
+
+In [16]: x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=0.3, ra
+    ...: ndom_state = 4)
+
+In [17]: gnb_mod = naive_bayes.GaussianNB()
+
+In [18]: gnb_mod.fit(x_train,y_train)
+Out[18]: GaussianNB(priors=None)
+
+In [19]: preds = gnb_mod.predict(x_test)
+
+In [20]: print_multiclass_classif_error_report(y_test, preds)
+Accuracy: 0.954166666667
+Avg. F1 (Micro): 0.954166666667
+Avg. F1 (Macro): 0.438771559064
+Avg. F1 (Weighted): 0.967935309979
+             precision    recall  f1-score   support
+
+          0       0.07      0.33      0.12         3
+          1       0.14      0.50      0.22         2
+          2       0.99      0.96      0.98       475
+
+avg / total       0.98      0.95      0.97       480
+
+Confusion Matrix:
+[[  1   0   2]
+ [  0   1   1]
+ [ 13   6 456]]
+ 
+ White
+
+In [21]: white = pd.read_csv('./data/wineQualityWhites.csv')
+
+In [22]: white.replace(clean, inplace =True)
+
+In [23]: x = white[features]
+
+In [24]: y = white['quality']
+
+In [25]: y = le.fit_transform(y)
+
+In [26]: x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=0.3, ra
+    ...: ndom_state = 4)
+
+In [27]: gnb_mod.fit(x_train,y_train)
+Out[27]: GaussianNB(priors=None)
+
+In [28]: preds = gnb_mod.predict(x_test)
+
+In [29]: print_multiclass_classif_error_report(y_test, preds)
+Accuracy: 0.95306122449
+Avg. F1 (Micro): 0.95306122449
+Avg. F1 (Macro): 0.376431458527
+Avg. F1 (Weighted): 0.937363043777
+             precision    recall  f1-score   support
+
+          0       0.33      0.02      0.04        53
+          1       0.11      0.12      0.12         8
+          2       0.96      0.99      0.98      1409
+
+avg / total       0.93      0.95      0.94      1470
+
+Confusion Matrix:
+[[   1    0   52]
+ [   0    1    7]
+ [   2    8 1399]]
