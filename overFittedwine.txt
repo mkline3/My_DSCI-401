@@ -1,0 +1,223 @@
+Red wine
+
+In [7]: red = pd.read_csv('./data/wineQualityReds.csv')
+
+In [8]: clean= {'quality':{0:"low",1:"low",2:"low", 3:"low", 4:"med", 5:"med",
+   ...: 6:"med", 7:"med", 8:"high", 9:"high",10:"high"}}
+
+In [9]: red.replace(clean, inplace=True)
+
+
+In [11]: features = list(red)
+
+In [12]: features.remove('quality')
+
+In [13]: x = red[features]
+
+In [14]: y = red['quality']
+
+In [15]: le = preprocessing.LabelEncoder()
+
+In [16]: y = le.fit_transform(y)
+
+In [17]: x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=0.3,ran
+    ...: dom_state = 4)
+
+In [18]: print('--------DTREE WITH GINI------')
+--------DTREE WITH GINI------
+
+In [19]: dtree_gini_mod = tree.DecisionTreeClassifier(criterion='gini')
+
+In [20]: dtree_gini_mod.fit(x_train,y_train)
+Out[20]:
+DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=None,
+            max_features=None, max_leaf_nodes=None,
+            min_impurity_split=1e-07, min_samples_leaf=1,
+            min_samples_split=2, min_weight_fraction_leaf=0.0,
+            presort=False, random_state=None, splitter='best')
+
+In [21]: preds_gini = dtree_gini_mod.predict(x_test)
+
+In [22]: print_multiclass_classif_error_report(y_test, preds_gini)
+Accuracy: 0.975
+Avg. F1 (Micro): 0.975
+Avg. F1 (Macro): 0.440216114635
+Avg. F1 (Weighted): 0.979113812544
+             precision    recall  f1-score   support
+
+          0       0.33      0.33      0.33         3
+          1       0.00      0.00      0.00         2
+          2       0.99      0.98      0.99       475
+
+avg / total       0.98      0.97      0.98       480
+
+Confusion Matrix:
+[[  1   0   2]
+ [  0   0   2]
+ [  2   6 467]]
+
+In [23]: test_lab = le.inverse_transform(y_test)
+
+In [24]: pred_lab = le.inverse_transform(preds_gini)
+
+In [25]: print('(Actual,Predicted);\n' +str(zip(test_lab, pred_labs)))
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+<ipython-input-25-05b4a2bf361b> in <module>()
+----> 1 print('(Actual,Predicted);\n' +str(zip(test_lab, pred_labs)))
+
+NameError: name 'pred_labs' is not defined
+
+In [26]: print('(Actual,Predicted);\n' +str(zip(test_lab, pred_lab)))
+(Actual,Predicted);
+[('med', 'med'), ('med', 'med'), ('med', 'med'), ('high', 'high'), ('med', 'med'
+), ('med', 'med'), ('low', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'
+), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'
+), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'
+), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'
+), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'
+), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'
+), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'
+), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'
+), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'
+), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'
+), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'
+), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'
+), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'
+), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'
+), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'
+), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'
+), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'
+), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'high
+'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med
+'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med
+'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med
+'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med
+'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med
+'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med
+'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med
+'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med
+'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med
+'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med
+'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med
+'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('high', 'med'), ('med', 'me
+d'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'me
+d'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'me
+d'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'me
+d'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'me
+d'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'me
+d'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'me
+d'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'me
+d'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'me
+d'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'me
+d'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'me
+d'), ('med', 'med'), ('med', 'low'), ('med', 'med'), ('med', 'med'), ('med', 'me
+d'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('low', 'med'), ('med', 'me
+d'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'me
+d'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'me
+d'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'me
+d'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'me
+d'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'me
+d'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'low'), ('med', 'me
+d'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'me
+d'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'me
+d'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'me
+d'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'me
+d'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'me
+d'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'me
+d'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'me
+d'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'me
+d'), ('med', 'med'), ('med', 'med'), ('med', 'high'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'low'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'low'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'low'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'low'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'm
+ed'), ('med', 'med'), ('med', 'med'), ('high', 'med'), ('med', 'med'), ('med', '
+med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', 'med'), ('med', '
+med')]
+
+White
+In [28]: white = pd.read_csv('./data/wineQualityWhites.csv')
+
+In [29]: clean= {'quality':{0:"low",1:"low",2:"low", 3:"low", 4:"med", 5:"med",
+    ...:  6:"med", 7:"med", 8:"high", 9:"high",10:"high"}}
+
+In [30]: white.replace(clean, inplace=True)
+
+In [31]: features = list(white)
+
+In [32]: features.remove('quality')
+
+In [33]: x = white[features]
+
+In [34]: y = white['quality']
+
+In [35]: y = le.fit_transform(y)
+
+In [36]: x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=0.3,ran
+    ...: dom_state = 4)
+
+In [37]: print('----DTREE ENTROPY------')
+----DTREE ENTROPY------
+
+In [38]: dtree_entropy_mod = tree.DecisionTreeClassifier(criterion='entropy')
+
+In [39]: dtree_entropy_mod.fit(x_train,y_train)
+Out[39]:
+DecisionTreeClassifier(class_weight=None, criterion='entropy', max_depth=None,
+            max_features=None, max_leaf_nodes=None,
+            min_impurity_split=1e-07, min_samples_leaf=1,
+            min_samples_split=2, min_weight_fraction_leaf=0.0,
+            presort=False, random_state=None, splitter='best')
+
+In [40]: preds_entropy = dtree_entropy_mod.predict(x_test)
+
+In [41]: print_multiclass_classif_error_report(y_test, preds_entropy)
+Accuracy: 0.947619047619
+Avg. F1 (Micro): 0.947619047619
+Avg. F1 (Macro): 0.515841957981
+Avg. F1 (Weighted): 0.948284439745
+             precision    recall  f1-score   support
+
+          0       0.39      0.45      0.42        53
+          1       0.20      0.12      0.15         8
+          2       0.97      0.97      0.97      1409
+
+avg / total       0.95      0.95      0.95      1470
+
+Confusion Matrix:
+[[  24    0   29]
+ [   0    1    7]
+ [  37    4 1368]]

@@ -1,0 +1,201 @@
+DTree wines
+Red Wines
+In [1]: import pandas as pd
+
+In [2]: from sklearn.model_selection import train_test_split
+
+In [3]: from sklearn import preprocessing
+
+In [4]: from sklearn import tree
+
+In [5]: from data_util import *
+
+In [6]: red = pd.read_csv('./data/wineQualityReds.csv')
+
+In [7]: features = list(red)
+
+In [8]: features.remove('quality')
+
+In [9]: x = red[features]
+
+In [10]: y = red['quality']
+
+In [11]: x_train, x_test, y_train, y_test = train_test_split(x,y,test_size =
+    ...: 3, random_state = 4)
+
+In [12]: print('----------DTREE WITH GINI IMPURITY CRITERION -----------')
+----------DTREE WITH GINI IMPURITY CRITERION -----------
+
+In [13]: dtree_gini_mod = tree.DecisionTreeClassifier(criterion='gini')
+
+In [14]: dtree_gini_mod.fit(x_train,y_train)
+Out[14]:
+DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=None,
+            max_features=None, max_leaf_nodes=None,
+            min_impurity_split=1e-07, min_samples_leaf=1,
+            min_samples_split=2, min_weight_fraction_leaf=0.0,
+            presort=False, random_state=None, splitter='best')
+
+In [15]: preds_gini = dtree_gini_mod.predict(x_test)
+
+In [16]: print_multiclass_classif_error_report(y_test, preds_gini)
+Accuracy: 0.6125
+Avg. F1 (Micro): 0.6125
+Avg. F1 (Macro): 0.362582065859
+Avg. F1 (Weighted): 0.618552706443
+             precision    recall  f1-score   support
+
+          3       0.00      0.00      0.00         2
+          4       0.09      0.13      0.11        15
+          5       0.73      0.65      0.69       211
+          6       0.60      0.64      0.62       190
+          7       0.53      0.54      0.54        59
+          8       0.17      0.33      0.22         3
+
+avg / total       0.63      0.61      0.62       480
+
+Confusion Matrix:
+[[  0   1   0   1   0   0]
+ [  1   2   4   8   0   0]
+ [  0  14 138  50   7   2]
+ [  0   4  44 121  19   2]
+ [  0   1   3  22  32   1]
+ [  0   0   0   0   2   1]]
+
+In [17]: print('\n--------------DTREE WITH ENTROPY CRITERION---------')
+
+--------------DTREE WITH ENTROPY CRITERION---------
+
+In [18]: dtree_entropy_mod = tree.DecisionTreeClassifier(criterion='entropy')
+
+In [19]: dtree_entropy_mod.fit(x_train,y_train)
+Out[19]:
+DecisionTreeClassifier(class_weight=None, criterion='entropy', max_depth=None
+            max_features=None, max_leaf_nodes=None,
+            min_impurity_split=1e-07, min_samples_leaf=1,
+            min_samples_split=2, min_weight_fraction_leaf=0.0,
+            presort=False, random_state=None, splitter='best')
+
+In [20]: preds_entropy = dtree_entropy_mod.predict(x_test)
+
+In [21]: print_multiclass_classif_error_report(y_test, preds_entropy)
+Accuracy: 0.58125
+Avg. F1 (Micro): 0.58125
+Avg. F1 (Macro): 0.332456269423
+Avg. F1 (Weighted): 0.587536104874
+             precision    recall  f1-score   support
+
+          3       0.00      0.00      0.00         2
+          4       0.06      0.07      0.06        15
+          5       0.68      0.61      0.64       211
+          6       0.59      0.61      0.60       190
+          7       0.51      0.54      0.52        59
+          8       0.11      0.33      0.17         3
+
+avg / total       0.60      0.58      0.59       480
+
+Confusion Matrix:
+[[  0   1   0   0   1   0]
+ [  0   1   6   7   1   0]
+ [  2  13 129  55  12   0]
+ [  1   1  49 116  17   6]
+ [  0   2   6  17  32   2]
+ [  0   0   0   2   0   1]]
+ 
+ --------------------------------------------------------------------------
+ White wines
+ 
+ In [22]: white = pd.read_csv('./data/wineQualityWhites.csv')
+
+In [23]: features = list(white)
+
+In [24]: features.remove('quality')
+
+In [25]: x = white[features]
+
+In [26]: y = white['quality']
+
+In [27]: x_train, x_test, y_train, y_test = train_test_split(x,y,test_size=0.3,
+    ...: random_state=4)
+
+In [28]: print('---------DTREE GINI--------')
+---------DTREE GINI--------
+
+In [29]: dtree_gini_mod = tree.DecisionTreeClassifier(criterion='gini')
+
+In [30]: dtree_gini_mod.fit(x_train, y_train)
+Out[30]:
+DecisionTreeClassifier(class_weight=None, criterion='gini', max_depth=None,
+            max_features=None, max_leaf_nodes=None,
+            min_impurity_split=1e-07, min_samples_leaf=1,
+            min_samples_split=2, min_weight_fraction_leaf=0.0,
+            presort=False, random_state=None, splitter='best')
+
+In [31]: preds_gini = dtree_gini_mod.predict(x_test)
+
+In [32]: print_multiclass_classif_error_report(y_test, preds_gini)
+Accuracy: 0.569387755102
+Avg. F1 (Micro): 0.569387755102
+Avg. F1 (Macro): 0.347146284048
+Avg. F1 (Weighted): 0.56975286359
+             precision    recall  f1-score   support
+
+          3       0.00      0.00      0.00         8
+          4       0.21      0.22      0.21        46
+          5       0.59      0.61      0.60       443
+          6       0.62      0.59      0.61       666
+          7       0.51      0.54      0.52       254
+          8       0.45      0.53      0.49        51
+          9       0.00      0.00      0.00         2
+
+avg / total       0.57      0.57      0.57      1470
+
+Confusion Matrix:
+[[  0   3   3   1   1   0   0]
+ [  0  10  18  15   3   0   0]
+ [  2  16 270 131  21   3   0]
+ [  3  15 140 394  90  24   0]
+ [  0   2  23  86 136   6   1]
+ [  0   1   0   7  15  27   1]
+ [  0   1   0   1   0   0   0]]
+
+In [33]: print('-------DTREE ENTROPY---------')
+-------DTREE ENTROPY---------
+
+In [34]: dtree_entropy_mod = tree.DecisionTreeClassifier(criterion='entropy')
+
+In [35]: dtree_entropy_mod.fit(x_train, y_train)
+Out[35]:
+DecisionTreeClassifier(class_weight=None, criterion='entropy', max_depth=None,
+            max_features=None, max_leaf_nodes=None,
+            min_impurity_split=1e-07, min_samples_leaf=1,
+            min_samples_split=2, min_weight_fraction_leaf=0.0,
+            presort=False, random_state=None, splitter='best')
+
+In [36]: preds_entropy = dtree_entropy_mod.predict(x_test)
+
+In [37]: print_multiclass_classif_error_report(y_test, preds_entropy)
+Accuracy: 0.571428571429
+Avg. F1 (Micro): 0.571428571429
+Avg. F1 (Macro): 0.344094174466
+Avg. F1 (Weighted): 0.571207047239
+             precision    recall  f1-score   support
+
+          3       0.00      0.00      0.00         8
+          4       0.24      0.22      0.23        46
+          5       0.60      0.59      0.59       443
+          6       0.62      0.60      0.61       666
+          7       0.51      0.57      0.54       254
+          8       0.43      0.45      0.44        51
+          9       0.00      0.00      0.00         2
+
+avg / total       0.57      0.57      0.57      1470
+
+Confusion Matrix:
+[[  0   0   3   4   1   0   0]
+ [  0  10  23  13   0   0   0]
+ [  0  19 262 134  24   4   0]
+ [  4  11 134 400  99  18   0]
+ [  0   2  17  79 145   9   2]
+ [  0   0   0  11  16  23   1]
+ [  0   0   0   2   0   0   0]]
